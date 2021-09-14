@@ -1,0 +1,20 @@
+package apresentação;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
+public class Teste {
+	public static void main(String[] args) {
+		try {
+			HttpResponse<String> response = Unirest.get("https://imdb8.p.rapidapi.com/title/find?q=The%20Avengers")
+					.header("x-rapidapi-key", "ecc3b6665emsh52614fc24f45b60p1e768fjsn400dcdc5ad6f")
+					.header("x-rapidapi-host", "imdb8.p.rapidapi.com")
+					.asString();
+			
+		} catch (UnirestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

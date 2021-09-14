@@ -1,0 +1,116 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class Estatistica {
+
+	public static void main(String[] args) {
+	
+
+		Random generator = new Random();
+		Scanner sc = new Scanner(System.in);
+		int n, m, aux = 0;
+		System.out.println("Digite o valor de n e m respectivamente: ");
+		n = sc.nextInt();
+		m = sc.nextInt();
+		
+		
+		// ----------------------------------Matrizes----------------------------------------------------------------------------------------------------------
+		
+		int[][] mat = new int[n][m];
+		System.out.println("Matriz 1");
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				mat[i][j] = generator.nextInt(50);
+				System.out.print("[" + i + "]" + "[" + j + "]:" + mat[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("Matriz 2");
+		for (int linha = 0; linha < mat.length; linha++) {
+			for (int coluna = 0; coluna < mat[linha].length; coluna++) {
+				int col = coluna;
+				for (int i = linha; i < mat.length; i++) {
+					for (int j = col + 1; j < mat[i].length; j++) {
+						if (mat[linha][coluna] > mat[i][j]) {
+							aux = mat[linha][coluna];
+							mat[linha][coluna] = mat[i][j];
+							mat[i][j] = aux;
+						}
+
+					}
+					col = -1;
+				}
+
+				System.out.print("[" + linha + "]" + "[" + coluna + "]:" + mat[linha][coluna] + " ");
+			}
+			System.out.println();
+		}
+		sc.close();
+		// -----------------------------------------------------------------------------------------------------------------------------------------------------
+		
+		// Amplitude Amostral (AA);
+		
+		int AA = mat[n - 1][m - 1] - mat[0][0];
+		System.out.println("Amplitude amostral: " + AA);
+		System.out.println();
+		
+		// Numero de Classes
+		
+		double numClasses = 1 + 3.3 * (Math.log(n * m) / Math.log(10));
+		numClasses = Math.ceil(numClasses);
+		System.out.println("Numero de classes: " + numClasses);
+		
+		// Amplitude de classe
+		
+		double amplitudeClasses = AA / numClasses;
+		amplitudeClasses = Math.ceil(amplitudeClasses);
+		System.out.println("Amplitude de classes: " + amplitudeClasses);
+		
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+		double[] amplitude = new double[(int) numClasses];
+		double amp = mat[0][0];
+		System.out.println("Amplitude de Classes: ");
+		for (int i = 0; i < amplitude.length; i++) {
+			if (i == 0) {
+				amplitude[i] = amp + amplitudeClasses;
+			} else {
+				amplitude[i] = amplitude[i - 1] + amplitudeClasses;
+			}
+			System.out.print(" [" + i + "]: " + amplitude[i]);
+		}
+		int a = 0;
+		int[] fi = new int[(int) numClasses];
+		for(int i = 0 ;i<fi.length;i++) {
+			fi[i] = 0;
+		}
+		System.out.println("");
+		System.out.println("Frequencia simples de classes");
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				while(mat[i][j] >= amplitude[a]) {
+					a++;
+				}
+				fi[a]++;
+				a=0;
+				
+			}
+
+		}
+		for (int i = 0; i < fi.length; i++) {
+		System.out.print(" [" + i + "]: " + fi[i]);
+		}
+		System.out.println();
+		System.out.println("Frequencia acumulada de classes");
+		int[] Fi = new int[(int) numClasses];
+		for (int i = 0; i < Fi.length; i++) {
+			if(i==0) {
+				Fi[i]=fi[i];
+			}
+			Fi[i] += fi[i];
+			
+			System.out.print(" [" + i + "]: " + Fi[i]);
+			
+		}
+	}
+}

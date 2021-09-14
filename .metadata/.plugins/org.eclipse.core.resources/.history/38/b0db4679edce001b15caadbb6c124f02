@@ -1,0 +1,147 @@
+import java.util.Scanner;
+
+public class teste {
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		int n, m;
+		double aux = 0;
+		System.out.println("Digite o valor de n e m respectivamente: ");
+		n = 6;
+		m = 10;
+		int N = n * m;
+		
+		double mat[][] = { {-3,-2.5,5,5.5,5.8,6.5,11,12.5,10.3,2.8}, {-3.5,-5,4.5,9.2,5.6,6.1,7.9,10.2,8.2,3.8}, { -4.5,-5.3,2.8,3.1,4.1,7.1,6.3,-4.8,-2.3,6.1} ,{ 0.5,-1.3,-5.6,5.1,4.2,3.1,-1.9,2.7,3.8,10.8}, { 1.2,2.5,2.9,3.4,3.5,2.7,-2.8,-3.8,5.7,5.4}, { 2.1,-5.4,2.7,3.1,3.9,2.9,3.8,5.8,9.1,8.2}};
+		// ----------------------------------Matrizes----------------------------------------------------------------------------------------------------------
+		System.out.println("Matriz 2");
+		for (int linha = 0; linha < mat.length; linha++) {
+			for (int coluna = 0; coluna < mat[linha].length; coluna++) {
+				int col = coluna;
+				for (int i = linha; i < mat.length; i++) {
+					for (int j = col + 1; j < mat[i].length; j++) {
+						if (mat[linha][coluna] > mat[i][j]) {
+							aux =  mat[linha][coluna];
+							mat[linha][coluna] = mat[i][j];
+							mat[i][j] = aux;
+						}
+					}
+					col = -1;
+				}
+
+				System.out.print("[" + linha + "]" + "[" + coluna + "]:" + mat[linha][coluna] + " ");
+			}
+			System.out.println();
+		}
+		
+		// -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+		// Amplitude Amostral (AA);
+
+		double AA = (mat[n - 1][m - 1] - mat[0][0]);
+		System.out.println("Amplitude amostral: " + AA);
+		System.out.println();
+
+		// Numero de Classes
+
+		double numClasses = 1 + 3.3 * (Math.log(n * m) / Math.log(10));
+		numClasses = Math.ceil(numClasses);
+		System.out.println("Numero de classes: " + numClasses);
+
+		// Amplitude de classe
+
+		double amplitudeClasses = sc.nextDouble();
+		System.out.println("Amplitude de classes: " + amplitudeClasses);
+
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		double[] amplitude = new double[(int) numClasses];
+		double amp = mat[0][0];
+		System.out.println("Amplitude de Classes: ");
+		for (int i = 0; i < amplitude.length; i++) {
+			if (i == 0) {
+				amplitude[i] = amp + amplitudeClasses;
+			} else {
+				amplitude[i] = amplitude[i - 1] + amplitudeClasses;
+			}
+			System.out.printf("[%d]: %.2f", i,amplitude[i]);
+		}
+		int a = 0;
+		int[] fi = new int[(int) numClasses];
+		for (int i = 0; i < fi.length; i++) {
+			fi[i] = 0;
+		}
+		System.out.println("");
+		System.out.println("Frequencia simples de classes");
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				while (mat[i][j] > amplitude[a]) {
+					a++;
+				}
+				fi[a]++;
+				a = 0;
+
+			}
+
+		}
+		for (int i = 0; i < fi.length; i++) {
+			System.out.print(" [" + i + "]: " + fi[i]);
+		}
+		System.out.println();
+		System.out.println("Frequencia acumulada de classes");
+		int[] Fi = new int[(int) numClasses];
+		for (int i = 0; i < Fi.length; i++) {
+			if (i == 0) {
+				Fi[i] = fi[i];
+			} else {
+				Fi[i] = Fi[i - 1] + fi[i];
+			}
+			System.out.print(" [" + i + "]: " + Fi[i]);
+		}
+		System.out.println();
+		System.out.println("Frequencia simples relativa de classes");
+		double[] fri = new double[(int) numClasses];
+		for (int i = 0; i < fri.length; i++) {
+			double div = fi[i];
+			fri[i] = div / N;
+			System.out.printf("[%d]: %.4f ", i, fri[i]);
+		}
+		System.out.println();
+		System.out.println("Frequencia acumulada relativa de classes");
+		double[] Fri = new double[(int) numClasses];
+		for (int i = 0; i < Fri.length; i++) {
+			if (i == 0) {
+				Fri[i] = fri[i];
+			} else {
+				Fri[i] = Fri[i - 1] + fri[i];
+			}
+			System.out.print(" [" + i + "]: " + Fri[i]);
+		}
+		System.out.println();
+		double[] pontoMedio = new double[(int) numClasses];
+		System.out.println("Ponto medio: ");
+		for (int i = 0; i < pontoMedio.length; i++) {
+			if (i == 0) {
+				pontoMedio[i] = (amp + amplitude[i])/2;
+			} else {
+				pontoMedio[i] = (amplitude[i] + amplitude[i-1])/2;
+			}
+			System.out.print(" [" + i + "]: " + pontoMedio[i]);
+		}
+		System.out.println();
+		System.out.println("Distribuição de frequencia: ");
+		System.out.println("i Amplitude fi  Fi   fri     Fri     PontoM");
+		double[][] distFrequencia = new double[(int)numClasses][7];
+		for(int i = 0; i<numClasses; i++) {
+			distFrequencia[i][0] =i+1;
+			distFrequencia[i][1] = amplitude[i];
+			distFrequencia[i][2] = fi[i];
+			distFrequencia[i][3] = Fi[i];
+			distFrequencia[i][4] = fri[i];
+			distFrequencia[i][5] = Fri[i];
+			distFrequencia[i][6] = pontoMedio[i];
+			System.out.printf("%d | %.2f  | %d | %d | %.4f | %.4f | %.4f |%n",i+1,amplitude[i],fi[i],Fi[i],fri[i],Fri[i],pontoMedio[i]);
+		}
+		sc.close();
+	}
+}

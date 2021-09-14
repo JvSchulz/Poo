@@ -1,0 +1,11 @@
+package dados;
+
+public class Reserva {
+	private int numReserva;
+	private String dataVoo;
+	private String horaVoo;
+	private float preco;
+	private String classeVoo;
+	private boolean idaEvolta;
+	private int poltrona;
+}
